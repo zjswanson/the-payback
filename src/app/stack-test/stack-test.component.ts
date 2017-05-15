@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { D3Service, D3, Selection } from 'd3-ng2-service';
+import { D3Service, D3, Selection, ScaleOrdinal } from 'd3-ng2-service';
 
 @Component({
   selector: 'app-stack-test',
@@ -20,8 +20,8 @@ export class StackTestComponent implements OnInit {
 
     ngOnInit() {
       let d3 = this.d3;
-      this.drawStack();
-      this.drawTableTest();
+      // this.drawStack();
+      this.drawCircles();
     }
 
     drawStack() {
@@ -30,22 +30,21 @@ export class StackTestComponent implements OnInit {
                     .attr('height',500);
 
 
-      var colors = ['blue', 'green', 'yellow'];
+      var colors = {debt1: 'blue', debt2: 'green', debt3: 'orange'};
 
       let stack = this.d3.stack().keys(["debt1","debt2","debt3"]);
 
       let series = stack(this.data);
-      console.log(series);
+
 
       let groups = svg.selectAll('g')
         .data(series)
         .enter()
         .append('g')
         .attr('fill', function(d,i) {
-          return colors[i];
-        });
-
-      let rects = groups.selectAll('rect')
+          return colors[d.key];
+        })
+        .selectAll('rect')
         .data(function(d:any) {return d;})
         .enter().append('rect')
         .attr('y', function(d,i) {return d[0]*10;})
@@ -53,30 +52,33 @@ export class StackTestComponent implements OnInit {
         .attr('x', function(d,i) {return 50*i;})
         .attr('width', 25)
 
-
-
-        console.log(rects.data());
-        console.log(groups.data());
     }
 
-    drawTableTest() {
-            var matrix = [
-        [11975,  5871, 8916, 2868],
-        [ 1951, 10048, 2060, 6171],
-        [ 8010, 16145, 8090, 8045],
-        [ 1013,   990,  940, 6907]
-      ];
+    drawCircles() {
 
-      var tr = this.d3.select("body")
-        .append("table")
-        .selectAll("tr")
-        .data(matrix)
-        .enter().append("tr");
+      let dataset = [1,2,3,4,5,6,7,8,9];
+      let svg = this.d3.select('#draw-here')
+                    .attr('width',500)
+                    .attr('height',500)
+                    .append('g')
+                    .attr('transform', "translate(250,250)");
 
-      var td = tr.selectAll("td")
-        .data(function(d) { return d; })
-        .enter().append("td")
-          .text(function(d) { return d; });
+      let pie = this.d3.pie()(dataset);
+
+
+
+      pie.forEach( (segment) => {
+        let arc = this.d3.arc()
+        .innerRadius(50)
+        .outerRadius(70)
+        .startAngle(segment.startAngle)
+        .endAngle(segment.endAngle);
+        svg.append('path')
+        .attr('d', arc);
+      })
+
+
     }
+
 
 }
