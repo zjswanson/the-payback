@@ -29,6 +29,9 @@ export class StackTestComponent implements OnInit {
                     .attr('width',500)
                     .attr('height',500);
 
+
+      var colors = ['blue', 'green', 'yellow'];
+
       let stack = this.d3.stack().keys(["debt1","debt2","debt3"]);
 
       let series = stack(this.data);
@@ -37,23 +40,23 @@ export class StackTestComponent implements OnInit {
       let groups = svg.selectAll('g')
         .data(series)
         .enter()
-        .append('g');
+        .append('g')
+        .attr('fill', function(d,i) {
+          return colors[i];
+        });
 
-      let data = groups.selectAll('rect')
+      let rects = groups.selectAll('rect')
         .data(function(d:any) {return d;})
         .enter().append('rect')
-        .attr('y', function(d,i) {return d[0]*10})
-        .attr('height', function(d) {return d[1]*10})
-        .attr('x', function(d,i) {return 25*i;})
+        .attr('y', function(d,i) {return d[0]*10;})
+        .attr('height', function(d) {return (d[1]-d[0])*10;})
+        .attr('x', function(d,i) {return 50*i;})
         .attr('width', 25)
-        .attr('fill', function(d,i) {
-              return 'black';
-            }
-         );
 
+
+
+        console.log(rects.data());
         console.log(groups.data());
-        console.log(data.data());
-
     }
 
     drawTableTest() {
