@@ -63,19 +63,33 @@ export class StackTestComponent implements OnInit {
                     .append('g')
                     .attr('transform', "translate(250,250)");
 
+      // let arc = this.d3.arc()
+      // .innerRadius(50)
+      // .outerRadius(70);
+      //
+      //
+      // let pie = this.d3.pie();
+      // let g = svg.selectAll('.arc')
+      //   .data(pie(dataset))
+      //   .enter().append('g')
+      //   .attr("class", 'arc')
+      //   .append('path')
+      //   .attr('d', (d,i) => {
+      //     let path = arc.startAngle(d.startAngle).endAngle(d.endAngle);
+      //     return path;
+      //   });
+
       let pie = this.d3.pie()(dataset);
-
-
-
       pie.forEach( (segment) => {
         let arc = this.d3.arc()
         .innerRadius(50)
         .outerRadius(70)
         .startAngle(segment.startAngle)
         .endAngle(segment.endAngle);
+        console.log(arc);
         svg.append('path')
         .attr('d', arc);
-      })
+      });
 
 
     }
