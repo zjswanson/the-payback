@@ -20,7 +20,7 @@ export class StackTestComponent implements OnInit {
 
     ngOnInit() {
       let d3 = this.d3;
-      // this.drawStack();
+      this.drawStack();
       this.drawCircles();
     }
 
@@ -63,6 +63,50 @@ export class StackTestComponent implements OnInit {
                     .append('g')
                     .attr('transform', "translate(250,250)");
 
+      var colors = {debt1: 'blue', debt2: 'green', debt3: 'orange'};
+
+      var scaleRadius = this.d3.scaleLinear().domain([0,9]).range([0,2*Math.PI]);
+
+      let stack = this.d3.stack().keys(["debt1","debt2","debt3"])(this.data);
+      console.log();
+
+      let groups = svg.selectAll('g')
+        .data(stack)
+        .enter()
+        .append('g')
+        .attr('fill', function(d,i) {
+          return colors[d.key];
+        });
+      groups.selectAll('g')
+        .data( (array):any=> {
+          return array;
+        })
+        .enter()
+        .append('path')
+        .attr( "d", this.d3.arc()
+          .innerRadius( (d) => {return d[0]*10;} )
+            .outerRadius( (d) => {return d[1]*10;} )
+            .startAngle( (d,i) => { return scaleRadius(i); } )
+            .endAngle( (d,i) => { return scaleRadius(i+1); })
+         );
+        // .classed('path-group',true)
+        // .data( (d)=> {
+        //   console.log(d);
+        //   return d;
+        // } );
+// ((Math.PI*2)/3) * i
+
+      // let pie = this.d3.pie()(dataset);
+      // pie.forEach( (segment) => {
+      //   let arc = this.d3.arc()
+      //   .innerRadius(50)
+      //   .outerRadius(70)
+      //   .startAngle(segment.startAngle)
+      //   .endAngle(segment.endAngle);
+      //   svg.append('path')
+      //   .attr('d', arc);
+      // });
+
       // let arc = this.d3.arc()
       // .innerRadius(50)
       // .outerRadius(70);
@@ -78,19 +122,6 @@ export class StackTestComponent implements OnInit {
       //     let path = arc.startAngle(d.startAngle).endAngle(d.endAngle);
       //     return path;
       //   });
-
-      let pie = this.d3.pie()(dataset);
-      pie.forEach( (segment) => {
-        let arc = this.d3.arc()
-        .innerRadius(50)
-        .outerRadius(70)
-        .startAngle(segment.startAngle)
-        .endAngle(segment.endAngle);
-        console.log(arc);
-        svg.append('path')
-        .attr('d', arc);
-      });
-
 
     }
 
