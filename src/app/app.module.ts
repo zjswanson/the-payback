@@ -8,11 +8,13 @@ import { FinanceService } from './finance.service';
 
 import { AppComponent } from './app.component';
 import { StackTestComponent } from './stack-test/stack-test.component';
+import { DebtViewComponent } from './debt-view/debt-view.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    StackTestComponent
+    StackTestComponent,
+    DebtViewComponent
   ],
   imports: [
     BrowserModule,

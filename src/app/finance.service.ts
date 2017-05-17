@@ -1,9 +1,15 @@
 import { Injectable } from '@angular/core';
+import { Debt } from './debt.model';
+
 
 @Injectable()
 export class FinanceService {
 
   constructor() { }
+
+
+
+
 
 
   randomDebtStack() {
@@ -19,7 +25,8 @@ export class FinanceService {
       let total = 0;
       for (var j =1;j<=numDebts;j++) {
         paymentArray[i]['debt'+j] = object['debt'+j]-i;
-       if (paymentArray[i]['debt'+j] <0) {paymentArray[i]['debt'+j] =0;}
+       if (paymentArray[i]['debt'+j] <0){
+         paymentArray[i]['debt'+j] =0;}
        total += paymentArray[i]['debt'+j];
       }
       if (!total) {break;}

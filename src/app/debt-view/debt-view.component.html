@@ -1,0 +1,17 @@
+<div *ngIf=showError>
+  <h1>Oops!  Looks like that payment isnt enough to ever pay off the debt!  Please increase the payment amount.</h1>
+</div>
+
+<label>Debt Name:</label>
+<input [(ngModel)]="debt.debtName">
+<label>Debt Balance:</label>
+<input [(ngModel)]="debt.balance" type="number">
+<label>Interest Rate (apr):</label>
+<input [(ngModel)]="debt.apr" type="number">
+<label>Monthly Payment:</label>
+<input [(ngModel)]="debt.payment" type="number">
+<button (click)="saveDebt()">Save</button>
+<button (click)="logMe()">log</button>
+<svg id="draw-here">
+
+</svg>

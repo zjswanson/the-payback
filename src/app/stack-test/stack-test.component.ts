@@ -1,12 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { D3Service, D3, Selection, ScaleOrdinal, Transition } from 'd3-ng2-service';
 import { FinanceService } from './../finance.service';
+import { DrawingService } from './../drawing.service';
 
 @Component({
   selector: 'app-stack-test',
   templateUrl: './stack-test.component.html',
   styleUrls: ['./stack-test.component.css'],
-  providers: [FinanceService]
+  providers: [FinanceService, DrawingService]
 })
 export class StackTestComponent implements OnInit {
   private d3: D3;
@@ -21,7 +22,7 @@ export class StackTestComponent implements OnInit {
   private svg:any = null;
   private circleSelection:any = null;
 
-    constructor(private d3Service: D3Service, private finance: FinanceService) { //
+    constructor(private d3Service: D3Service, private finance: FinanceService, private draw: DrawingService) { //
       this.d3 = d3Service.getD3();
 
     }
@@ -43,7 +44,7 @@ export class StackTestComponent implements OnInit {
 
     reDraw() {
       this.data = this.finance.randomDebtStack();
-      this.drawCircles();
+      this.draw.drawCircleStack(this.circleSelection,this.data);
     }
 
     calculatePayment() {
