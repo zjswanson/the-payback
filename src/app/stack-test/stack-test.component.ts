@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { D3Service, D3, Selection, ScaleOrdinal } from 'd3-ng2-service';
+import { D3Service, D3, Selection, ScaleOrdinal, Transition } from 'd3-ng2-service';
 
 @Component({
   selector: 'app-stack-test',
@@ -31,8 +31,10 @@ export class StackTestComponent implements OnInit {
       this.circleSelection = this.svg.append('g')
       .attr('transform', "translate(250,250)");
       // this.drawStack();
+      this.randoDebts();
+
       this.drawCircles();
-      this.calculatePayment();
+      // this.calculatePayment();
 
 
     }
@@ -53,47 +55,28 @@ export class StackTestComponent implements OnInit {
     }
 
     randoDebts() {
-      let numDebts:number = Math.floor(Math.random()*10)+1;
-      let numPayments:number = Math.floor(Math.random()*30)+1;
+      let numDebts:number = Math.floor(Math.random()*7)+3;
+      let numPayments:number = Math.floor(Math.random()*10)+4;
       let paymentArray = [];
-      for (let j =1;j<=numPayments;j++) {
-        let object:{} = {}
-        for (let i=1;i<+numDebts;i++) {
-          object['debt'+i] = Math.floor(Math.random()*5)+1;
-        };
-        paymentArray.push(object);
-      };
+      let object = {};
+      for (var i=1;i<=numDebts;i++)  {
+        object['debt'+i] = Math.floor(Math.random()*5)+3;
+      }
+      for (var i=0;i<numPayments;i++) {
+        paymentArray[i] = {};
+        let total = 0;
+        for (var j =1;j<=numDebts;j++) {
+          paymentArray[i]['debt'+j] = object['debt'+j]-i;
+         if (paymentArray[i]['debt'+j] <0) {paymentArray[i]['debt'+j] =0;}
+         total += paymentArray[i]['debt'+j];
+        }
+        if (!total) {break;}
+      }
       this.data = paymentArray;
+      console.log(this.data);
       this.calculatePayment();
     }
 
-    // drawStack() {
-    //   let svg = this.svg;
-    //
-    //
-    //   var colors = {debt1: 'blue', debt2: 'green', debt3: 'orange'};
-    //
-    //   let stack = this.d3.stack().keys(["debt1","debt2","debt3"]);
-    //
-    //   let series = stack(this.data);
-    //
-    //
-    //   let groups = svg.selectAll('g')
-    //     .data(series)
-    //     .enter()
-    //     .append('g')
-    //     .attr('fill', function(d,i) {
-    //       return colors[d.key];
-    //     })
-    //     .selectAll('rect')
-    //     .data(function(d:any) {return d;})
-    //     .enter().append('rect')
-    //     .attr('y', function(d,i) {return d[0]*10;})
-    //     .attr('height', function(d) {return (d[1]-d[0])*10;})
-    //     .attr('x', function(d,i) {return 50*i;})
-    //     .attr('width', 25)
-    //
-    // }
 
     randoColor() {
       let rand255 = function(){ return Math.floor(Math.random()*256)};
@@ -101,23 +84,52 @@ export class StackTestComponent implements OnInit {
       return color;
     }
 
-    drawCircles() {
-
-      let dataset = [1,2,3,4,5,6,7,8,9];
-      let svg = this.circleSelection;
+    drawStack() {
+      let svg = this.svg;
 
 
       var colors = {debt1: 'blue', debt2: 'green', debt3: 'orange'};
 
-      var scaleRadius = this.d3.scaleLinear().domain([0,this.data.length]).range([0,2*Math.PI]);
+      let stack = this.d3.stack().keys(Object.keys(this.data[0]));
+      let series = stack(this.data);
 
-      let stack = this.d3.stack().keys( Object.keys(this.data[0]))(this.data);
+
+      let groups = svg.selectAll('.bargroup')
+        .data(series);
+      groups.exit().remove();
+      let rects = groups.enter()
+        .append('g')
+        .classed('bargroup',true)
+        .merge(groups)
+        .attr('fill', (d,i) =>{
+          return this.randoColor();
+        })
+        .selectAll('rect')
+        .data(function(d:any) {return d;})
+      rects.exit().remove();
+      rects
+        .enter().append('rect')
+        .merge(rects)
+        .attr('y', function(d,i) {return d[0]*10;})
+        .attr('height', function(d) {return (d[1]-d[0])*10;})
+        .attr('x', function(d,i) {return 27*i;})
+        .attr('width', 25)
+
+    }
+
+
+
+    drawCircles() {
+      let svg = this.circleSelection;
+      svg.selectAll('g').remove();
+      var scaleAngle = this.d3.scaleLinear().domain([0,this.data.length]).range([0,(2*Math.PI)]);
+
+      let stack = this.d3.stack().keys(Object.keys(this.data[0]))(this.data);
+
       let groups = svg.selectAll('g')
-       .data(stack);
-       groups.exit().remove();
-      let paths = groups.enter()
+       .data(stack)
+       .enter()
        .append('g')
-       .merge(groups)
        .attr('fill', (d,i) => {
          return this.randoColor();
        })
@@ -125,34 +137,16 @@ export class StackTestComponent implements OnInit {
        .data( (array):any=> {
          return array;
        })
-       paths.exit().remove();
-       paths.enter()
+       .enter()
        .append('path')
-       .merge(paths)
-       .transition()
        .attr( "d", this.d3.arc()
-         .innerRadius( (d) => {return d[0]*10;} )
-           .outerRadius( (d) => {return d[1]*10;} )
-           .startAngle( (d,i) => { return scaleRadius(i); } )
-           .endAngle( (d,i) => { return scaleRadius(i+1); })
+         .innerRadius( (d) => {return (d[0]*5)+20;} )
+           .outerRadius( (d) => {return (d[1]*5)+20;} )
+           .startAngle( (d,i) => { return scaleAngle(i); } )
+           .endAngle( (d,i) => { return scaleAngle(i+1); })
+           .padAngle(.5)
+           .padRadius(5)
         );
-
-        // svg.append('circle')
-        //   .attr('fill','red')
-        //   .attr('r', 40);
-        // svg.append('text')
-        //   .text("total Payment: "+this.totalPayment);
-
-      // let pie = this.d3.pie()(dataset);
-      // pie.forEach( (segment) => {
-      //   let arc = this.d3.arc()
-      //   .innerRadius(50)
-      //   .outerRadius(70)
-      //   .startAngle(segment.startAngle)
-      //   .endAngle(segment.endAngle);
-      //   svg.append('path')
-      //   .attr('d', arc);
-      // });
     }
 
 
