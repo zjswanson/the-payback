@@ -1,10 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { D3Service, D3, Selection, ScaleOrdinal, Transition } from 'd3-ng2-service';
+import { FinanceService } from './../finance.service';
 
 @Component({
   selector: 'app-stack-test',
   templateUrl: './stack-test.component.html',
-  styleUrls: ['./stack-test.component.css']
+  styleUrls: ['./stack-test.component.css'],
+  providers: [FinanceService]
 })
 export class StackTestComponent implements OnInit {
   private d3: D3;
@@ -19,8 +21,9 @@ export class StackTestComponent implements OnInit {
   private svg:any = null;
   private circleSelection:any = null;
 
-    constructor(d3Service: D3Service) { //
+    constructor(private d3Service: D3Service, private finance: FinanceService) { //
       this.d3 = d3Service.getD3();
+
     }
 
     ngOnInit() {
@@ -31,8 +34,7 @@ export class StackTestComponent implements OnInit {
       this.circleSelection = this.svg.append('g')
       .attr('transform', "translate(250,250)");
       // this.drawStack();
-      this.randoDebts();
-
+      this.data = this.finance.randomDebtStack();
       this.drawCircles();
       // this.calculatePayment();
 
@@ -40,7 +42,7 @@ export class StackTestComponent implements OnInit {
     }
 
     reDraw() {
-      this.randoDebts();
+      this.data = this.finance.randomDebtStack();
       this.drawCircles();
     }
 
@@ -52,29 +54,6 @@ export class StackTestComponent implements OnInit {
         });
       });
       this.totalPayment = total;
-    }
-
-    randoDebts() {
-      let numDebts:number = Math.floor(Math.random()*7)+3;
-      let numPayments:number = Math.floor(Math.random()*10)+4;
-      let paymentArray = [];
-      let object = {};
-      for (var i=1;i<=numDebts;i++)  {
-        object['debt'+i] = Math.floor(Math.random()*5)+3;
-      }
-      for (var i=0;i<numPayments;i++) {
-        paymentArray[i] = {};
-        let total = 0;
-        for (var j =1;j<=numDebts;j++) {
-          paymentArray[i]['debt'+j] = object['debt'+j]-i;
-         if (paymentArray[i]['debt'+j] <0) {paymentArray[i]['debt'+j] =0;}
-         total += paymentArray[i]['debt'+j];
-        }
-        if (!total) {break;}
-      }
-      this.data = paymentArray;
-      console.log(this.data);
-      this.calculatePayment();
     }
 
 
