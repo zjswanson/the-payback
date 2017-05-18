@@ -23,12 +23,16 @@ export class AppComponent {
     this.debtsArray.push(sampleDebt3);
     console.log(this.debtsArray);
 
+
   }
 
   saveDebt(debt, i) {
     this.debtsArray[i] = debt;
-    console.log(this.debtsArray);
-    console.log(i);
+    this.parseDebts();
+    console.log(this.balanceSchedule);
+    console.log(this.totalInterest);
+    console.log(this.totalPayments);
+    // call drawing method here
   }
 
   addNewDebt() {
@@ -37,6 +41,30 @@ export class AppComponent {
   }
 
   parseDebts() {
+    //each iteration, create object, give a prop for each debt equal to its payment with name of debt.  Stop iterating when all payments are 0.
+    this.balanceSchedule = [];
+    this.totalInterest =0;
+    this.totalPayments =0;
+    this.debtsArray.forEach((debt)=> {
+      this.totalInterest += debt.totalInterest;
+      this.totalPayments += debt.totalPaid;
+    });
+    let monthtotal = 1;
+    let i = 0;
+
+    while (monthtotal>0) {
+      monthtotal = 0;
+      this.balanceSchedule[i] = {};
+      this.debtsArray.forEach((debt)=> {
+        this.balanceSchedule[i][debt.debtName] = 0;
+        if(debt.balanceSchedule[i] && debt.balanceSchedule[i][debt.debtName]) {
+          this.balanceSchedule[i][debt.debtName] = debt.balanceSchedule[i][debt.debtName];
+          monthtotal += debt.balanceSchedule[i][debt.debtName];
+        }
+      });
+      i++;
+    }
+
 
   }
 
