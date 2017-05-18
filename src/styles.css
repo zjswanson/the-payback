@@ -5,6 +5,7 @@ div {
 
 .display-totals {
   display: inline-block;
+  vertical-align: top;
 }
 
 .display-spiral {
