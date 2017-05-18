@@ -78,6 +78,18 @@ export class DrawingService {
 
   drawCircleStack(selection, data) {
     let svg = selection;
+
+    let max = 1000;
+
+    console.log(data[0]);
+
+    for ( let value in data[0]) {
+      max += data[0][value];
+    }
+
+    var scaleLength = this.d3.scaleLinear().domain([0, max]).range([0,220]);
+
+
     svg.selectAll('g').remove();
     var scaleAngle = this.d3.scaleLinear().domain([0,data.length]).range([0,(2*Math.PI)]);
 
@@ -97,8 +109,8 @@ export class DrawingService {
      .enter()
      .append('path')
      .attr( "d", this.d3.arc()
-       .innerRadius( (d) => {return (d[0]*5)+20;} )
-         .outerRadius( (d) => {return (d[1]*5)+20;} )
+       .innerRadius( (d) => {return scaleLength(d[0])+20;} )
+         .outerRadius( (d) => {return scaleLength(d[1])+20;} )
          .startAngle( (d,i) => { return scaleAngle(i); } )
          .endAngle( (d,i) => { return scaleAngle(i+1); })
          .padAngle(.5)

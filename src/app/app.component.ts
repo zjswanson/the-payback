@@ -1,18 +1,26 @@
 import { Component, OnInit } from '@angular/core';
 import { Debt } from './debt.model';
+import { DrawingService } from './drawing.service';
+import { D3Service, D3, Selection } from 'd3-ng2-service';
 
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+  styleUrls: ['./app.component.css'],
+  providers: [DrawingService]
 })
 export class AppComponent {
+  public d3: D3;
   public debtsArray: Debt[] = [];
   public balanceSchedule: {}[] = [];
   public totalPayments: number =0;
   public totalInterest: number =0;
+  public selection:any;
 
+  constructor(private d3Service: D3Service, private draw: DrawingService) { //
+    this.d3 = d3Service.getD3();
+  }
 
   ngOnInit() {
     let sampleDebt = new Debt("Sample Payment", 1000, 6.5, 50);
@@ -21,7 +29,7 @@ export class AppComponent {
     this.debtsArray.push(sampleDebt2);
     let sampleDebt3 = new Debt("Sample Payment 3", 800, 8, 100);
     this.debtsArray.push(sampleDebt3);
-    console.log(this.debtsArray);
+    this.selection = this.d3.select('#spiral').attr('width', 500).attr('height', 500).append('g')      .attr('transform', "translate(250,250)");
 
 
   }
@@ -32,7 +40,7 @@ export class AppComponent {
     console.log(this.balanceSchedule);
     console.log(this.totalInterest);
     console.log(this.totalPayments);
-    // call drawing method here
+    this.draw.drawCircleStack(this.selection, this.balanceSchedule);
   }
 
   addNewDebt() {
@@ -64,9 +72,9 @@ export class AppComponent {
       });
       i++;
     }
-
-
   }
+
+
 
 
 }

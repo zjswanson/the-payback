@@ -1,8 +1,14 @@
 
 <div class="container">
   <div class="display-row">
-    <div *ngFor="let debt of debtsArray">
-      <h2>{{debt.debtName}}</h2>
+    <div class="display-totals">
+      <h3>Total Paid: {{this.totalPayments}}</h3>
+      <h3>Total Interest Paid: {{this.totalInterest}}</h3>
+    </div>
+    <div class="display-spiral">
+      <svg id="spiral">
+
+      </svg>
     </div>
 
   </div>
