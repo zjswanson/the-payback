@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Debt } from './../debt.model';
 import { D3Service, D3, Selection } from 'd3-ng2-service';
 import { FinanceService } from './../finance.service';
@@ -13,8 +13,8 @@ import { DrawingService } from './../drawing.service';
 })
 export class DebtViewComponent implements OnInit {
 
-  public debt:Debt;
-  public selection;
+  @Input() public debt:Debt;
+  @Output() sendDebt: EventEmitter<any> = new EventEmitter();
   public d3: D3;
   public showError = false;
 
@@ -23,16 +23,9 @@ export class DebtViewComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.debt = new Debt('Sample Debt', 1000, 6.5, 50);
-    this.selection =
-    this.d3.selectAll('#draw-here')
-      .attr('width', 500)
-      .attr('height', 500)
-      .append('g')
-      .attr('transform', "translate(250,250)");
   }
 
-  saveDebt() {
+  saveDebt(debt: Debt) {
     this.showError = false;
     let newDebt = new Debt(
       this.debt.debtName,
@@ -40,19 +33,15 @@ export class DebtViewComponent implements OnInit {
       this.debt.apr,
       this.debt.payment
     );
-    console.log(newDebt);
     newDebt.calcDebtBalanceSchedule();
     if (newDebt.infinite) {
       this.showError = true;
       return;
+    } else {
+      this.debt = newDebt;
+      this.sendDebt.emit(this.debt);
     }
-    this.debt = newDebt;
-    this.draw.drawCircle(this.selection,this.debt);
-
   }
 
-  logMe(){
-    console.log(this.debt);
-  }
 
 }

@@ -3,6 +3,8 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 
+import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
+
 import { D3Service } from 'd3-ng2-service';
 import { FinanceService } from './finance.service';
 
@@ -19,7 +21,8 @@ import { DebtViewComponent } from './debt-view/debt-view.component';
   imports: [
     BrowserModule,
     FormsModule,
-    HttpModule
+    HttpModule,
+    NgbModule.forRoot()
   ],
   providers: [D3Service, FinanceService],
   bootstrap: [AppComponent]

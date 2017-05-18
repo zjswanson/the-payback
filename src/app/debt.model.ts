@@ -9,6 +9,7 @@ export class Debt {
     this.infinite = false;
     this.totalPaid = 0;
     this.totalInterest = 0;
+    this.calcDebtBalanceSchedule();
   }
 
   calcDebtBalanceSchedule() {

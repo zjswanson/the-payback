@@ -1,5 +1,23 @@
-<h1>
-  {{title}}
-</h1>
-<app-debt-view></app-debt-view>
+
+<div class="container">
+  <div class="display-row">
+    <div *ngFor="let debt of debtsArray">
+      <h2>{{debt.debtName}}</h2>
+    </div>
+
+  </div>
+  <div class="input-row">
+    <div class="col-thirds">
+      <h2>Add New Payment</h2>
+      <button (click)="addNewDebt()" name="button">Add New Payment</button>
+    </div>
+    <div class="col-thirds" *ngFor="let debt of debtsArray; let i=index">
+      <app-debt-view [debt]="debt" (sendDebt)="saveDebt($event, i)"></app-debt-view>
+    </div>
+
+  </div>
+
+
+
+</div>
 <!-- <app-stack-test></app-stack-test> -->

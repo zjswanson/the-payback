@@ -53,6 +53,27 @@ export class DrawingService {
          .padAngle(.5)
          .padRadius(5)
       );
+
+    svg.append('g')
+      .classed('debt-label', true)
+      .attr('transform', 'translate(-250,-80)')
+      .append('text')
+      .text("Total Paid: $"+debtObject.totalPaid)
+
+    svg.append('g')
+      .classed('debt-label', true)
+      .attr('transform', 'translate(-250,-60)')
+      .append('text')
+      .text("Total Interest Paid: $"+debtObject.totalInterest)
+      .attr('transform', 'translate(0,30)')
+
+    svg.append('g')
+      .classed('debt-label', true)
+      .attr('transform', 'translate(-250,-150)')
+      .append('text')
+      .text("Paid Off In: "+data.length+" Months!")
+      .attr('transform', 'translate(0,30)')
+
   }
 
   drawCircleStack(selection, data) {
