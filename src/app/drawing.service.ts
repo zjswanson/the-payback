@@ -123,8 +123,10 @@ export class DrawingService {
         .style('left', (this.d3.event.x) + "px")
         .style('top', (this.d3.event.y) + "px")
         .classed('hidden', false);
-        this.d3.select('#nameTip');
-
+        let name = this.d3.event.srcElement.parentElement.attributes[0].nodeValue;
+        this.d3.select('#nameTip').text(name);
+        this.d3.select('#monthTip').text(i);
+        this.d3.select('#balanceTip').text(d);
       })
       .on('mouseout', (d)=> {
         this.d3.select('.toolbox')
