@@ -31,7 +31,7 @@ export class AppComponent {
     this.debtsArray.push(sampleDebt2);
     let sampleDebt3 = new Debt("Sample Payment 3", 800, 8, 100);
     this.debtsArray.push(sampleDebt3);
-    this.selection = this.d3.select('#spiral').attr('width', 500).attr('height', 500).append('g')      .attr('transform', "translate(250,250)");
+    this.selection = this.d3.select('#spiral').attr('width', 500).attr('height', 500).append('g').attr('transform', "translate(150,350)");
 
 
   }
@@ -42,6 +42,7 @@ export class AppComponent {
 
   saveDebt(debt, i) {
     this.debtsArray[i] = debt;
+    console.log(this.debtsArray);
     this.parseDebts();
     this.parseTotals();
     this.draw.drawCircleStack(this.selection, this.balanceSchedule);

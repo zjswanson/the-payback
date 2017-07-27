@@ -1,9 +1,9 @@
 
 <div class="container-fluid">
   <div class="display-row row">
-    <div class="display-totals col-md-3">
-      <h2>The</h2>
-      <h1>Payback</h1>
+    <div class="display-totals col-md-3 column">
+      <h2><span class="title">The</span></h2>
+      <h1><span class="title">Payback</span></h1>
       <h4>Total Paid: </h4>
       <h4>{{this.totalPayments}}</h4>
       <h4>Total Interest Paid: </h4>
@@ -12,19 +12,16 @@
       <h4>and {{totalMonths}} Months</h4>
       <button type="button" name="reDraw" (click)="reDraw()">Re-Draw</button>
     </div>
-    <div class="display-spiral col-md-5">
+    <div class="display-spiral col-md-5 column">
       <svg id="spiral">
 
       </svg>
     </div>
-    <div class="debt-input col-md-4">
-      <h2>Enter debts:</h2>
+    <div class="debt-input col-md-4 column">
+      <h2><span class="title">Enter debts:</span></h2>
+      <button (click)="addNewDebt()" name="button">New</button>
       <div *ngFor="let debt of debtsArray; let i=index">
           <app-debt-view [debt]="debt" (sendDebt)="saveDebt($event, i)"></app-debt-view>
-      </div>
-      <div>
-          <h2>Add New Payment</h2>
-          <button (click)="addNewDebt()" name="button">Add New Payment</button>
       </div>
     </div>
   </div>

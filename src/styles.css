@@ -1,6 +1,19 @@
 /* You can add global styles to this file, and also import other style files */
-div {
-  /*border: 1px solid blue;*/
+
+@font-face{
+    font-family: 'mexcellent_3d';
+    src: url('/assets/mexcellent_3d.ttf')format('truetype');
+}
+@font-face{
+    font-family: 'mexcellent';
+    src: url('/assets/mexcellent.ttf')format('truetype');
+}
+
+body, button{
+    font-family: 'mexcellent';
+}
+.title{
+    font-family: 'mexcellent_3d';
 }
 
 .hidden {
@@ -18,6 +31,21 @@ div {
   z-index: 1000;
 }
 
-.display-spiral {
-  width: 500px;
+.display-row {
+    height: 100vh;
+}
+
+.column {
+    overflow: scroll;
+}
+
+.debt-input>h2,
+.debt-input>button {
+    display: inline-block;
+    margin: 0;
+    vertical-align: top;
+}
+
+.card {
+    margin-bottom: 10px;
 }

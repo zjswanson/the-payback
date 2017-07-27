@@ -99,13 +99,7 @@ export class DrawingService {
      .enter()
      .append('g')
      .attr('name', (d,i)=>{
-      let groupName;
-      nameArray.forEach(function(name) {
-         if (data[0][name] === d) {
-           groupName = name;
-         }
-       });
-       return groupName;
+         return d['key'];
      })
      .attr('fill', (d,i) => {
        return this.randoColor();
