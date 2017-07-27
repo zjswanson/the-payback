@@ -16,6 +16,8 @@ export class AppComponent {
   public balanceSchedule: {}[] = [];
   public totalPayments: number =0;
   public totalInterest: number =0;
+  public totalYears: number =0;
+  public totalMonths: number =0;
   public selection:any;
 
   constructor(private d3Service: D3Service, private draw: DrawingService) { //
@@ -34,18 +36,27 @@ export class AppComponent {
 
   }
 
+  reDraw() {
+      this.draw.drawCircleStack(this.selection, this.balanceSchedule);
+  }
+
   saveDebt(debt, i) {
     this.debtsArray[i] = debt;
     this.parseDebts();
-    console.log(this.balanceSchedule);
-    console.log(this.totalInterest);
-    console.log(this.totalPayments);
+    this.parseTotals();
     this.draw.drawCircleStack(this.selection, this.balanceSchedule);
   }
 
   addNewDebt() {
     let newDebt = new Debt("New Payment", 1000, 6.5, 50);
     this.debtsArray.unshift(newDebt);
+  }
+
+  parseTotals() {
+    this.totalYears = Math.floor(this.balanceSchedule.length/12);
+    this.totalYears = Math.floor(this.balanceSchedule.length%12);
+    this.totalPayments = +(this.totalPayments.toFixed(2));
+    this.totalInterest = +(this.totalInterest.toFixed(2));
   }
 
   parseDebts() {

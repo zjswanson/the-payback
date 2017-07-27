@@ -81,8 +81,6 @@ export class DrawingService {
 
     let max = 1000;
 
-    console.log(data[0]);
-
     for ( let value in data[0]) {
       max += data[0][value];
     }
@@ -93,12 +91,22 @@ export class DrawingService {
     svg.selectAll('g').remove();
     var scaleAngle = this.d3.scaleLinear().domain([0,data.length]).range([0,(2*Math.PI)]);
 
-    let stack = this.d3.stack().keys(Object.keys(data[0]))(data);
+    let nameArray = Object.keys(data[0]);
+    let stack = this.d3.stack().keys(nameArray)(data);
 
     let groups = svg.selectAll('g')
      .data(stack)
      .enter()
      .append('g')
+     .attr('name', (d,i)=>{
+      let groupName;
+      nameArray.forEach(function(name) {
+         if (data[0][name] === d) {
+           groupName = name;
+         }
+       });
+       return groupName;
+     })
      .attr('fill', (d,i) => {
        return this.randoColor();
      })
@@ -115,7 +123,19 @@ export class DrawingService {
          .endAngle( (d,i) => { return scaleAngle(i+1); })
          .padAngle(.5)
          .padRadius(2)
-      );
+      )
+      .on('mouseenter', (d,i)=>{
+        this.d3.select('.toolbox')
+        .style('left', (this.d3.event.x) + "px")
+        .style('top', (this.d3.event.y) + "px")
+        .classed('hidden', false);
+        this.d3.select('#nameTip');
+
+      })
+      .on('mouseout', (d)=> {
+        this.d3.select('.toolbox')
+        .classed('hidden', true);
+      });
   }
 
 

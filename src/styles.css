@@ -3,33 +3,21 @@ div {
   /*border: 1px solid blue;*/
 }
 
-.display-totals {
-  display: inline-block;
-  vertical-align: top;
+.hidden {
+  display: none;
+}
+
+/* named to not conflict with bootstrap's tooltip styles */
+.toolbox {
+  position: fixed;
+  font-size: .8em;
+  top: 50px;
+  left: 50px;
+  background-color: grey;
+  border: 2px solid black;
+  z-index: 1000;
 }
 
 .display-spiral {
   width: 500px;
-  display: inline-block;
-}
-
-.display-row {
-  height: 80vh;
-}
-
-.input-row {
-  height: 80vh;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-around;
-}
-
-.col-thirds {
-  display: inline-block;
-  height: 300px;
-  width: 200px;
-  margin-bottom: 30px;
-
-
-
 }

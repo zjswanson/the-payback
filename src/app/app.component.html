@@ -1,29 +1,36 @@
 
-<div class="container">
-  <div class="display-row">
-    <div class="display-totals">
-      <h3>Total Paid: {{this.totalPayments}}</h3>
-      <h3>Total Interest Paid: {{this.totalInterest}}</h3>
+<div class="container-fluid">
+  <div class="display-row row">
+    <div class="display-totals col-md-3">
+      <h2>The</h2>
+      <h1>Payback</h1>
+      <h4>Total Paid: </h4>
+      <h4>{{this.totalPayments}}</h4>
+      <h4>Total Interest Paid: </h4>
+      <h4>{{this.totalInterest}}</h4>
+      <h4>Debt Paid in {{totalYears}} years</h4>
+      <h4>and {{totalMonths}} Months</h4>
+      <button type="button" name="reDraw" (click)="reDraw()">Re-Draw</button>
     </div>
-    <div class="display-spiral">
+    <div class="display-spiral col-md-5">
       <svg id="spiral">
 
       </svg>
     </div>
-
-  </div>
-  <div class="input-row">
-    <div class="col-thirds">
-      <h2>Add New Payment</h2>
-      <button (click)="addNewDebt()" name="button">Add New Payment</button>
+    <div class="debt-input col-md-4">
+      <h2>Enter debts:</h2>
+      <div *ngFor="let debt of debtsArray; let i=index">
+          <app-debt-view [debt]="debt" (sendDebt)="saveDebt($event, i)"></app-debt-view>
+      </div>
+      <div>
+          <h2>Add New Payment</h2>
+          <button (click)="addNewDebt()" name="button">Add New Payment</button>
+      </div>
     </div>
-    <div class="col-thirds" *ngFor="let debt of debtsArray; let i=index">
-      <app-debt-view [debt]="debt" (sendDebt)="saveDebt($event, i)"></app-debt-view>
-    </div>
-
   </div>
 
-
-
+  <div class="toolbox hidden">
+    <p id="nameTip">Debt Name</p>
+    <p id="balanceTip">Remaining Balance</p>
+  </div>
 </div>
-<!-- <app-stack-test></app-stack-test> -->

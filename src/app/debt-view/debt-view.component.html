@@ -1,9 +1,16 @@
-<label>Debt Name:</label>
-<input [(ngModel)]="debt.debtName">
-<label>Debt Balance:</label>
-<input [(ngModel)]="debt.balance" type="number">
-<label>Interest Rate (apr):</label>
-<input [(ngModel)]="debt.apr" type="number">
-<label>Monthly Payment:</label>
-<input [(ngModel)]="debt.payment" type="number">
-<button (click)="saveDebt(debt)">Save</button>
+
+<div class="card">
+    <div class="card-header">
+        <label for="debtName">Debt Name:</label>
+        <input name="debtName" [(ngModel)]="debt.debtName" class="form-control">
+    </div>
+    <div class="card-block">
+        <label for="balance">Debt Balance:</label>
+        <input name="balance" [(ngModel)]="debt.balance" type="number" class="form-control">
+        <label for="apr">Interest Rate (apr):</label>
+        <input name="apr" [(ngModel)]="debt.apr" type="number" class="form-control">
+        <label for="payment">Monthly Payment:</label>
+        <input name="payment" [(ngModel)]="debt.payment" type="number" class="form-control">
+        <button (click)="saveDebt(debt)">Save</button>
+    </div>
+</div>
